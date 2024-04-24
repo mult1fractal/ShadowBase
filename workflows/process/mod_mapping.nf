@@ -1,14 +1,14 @@
 process mod_mapping { 
     label 'minimap2'
-    publishDir "${params.output}/${name}/1.Modmapped_bam", mode: 'copy'
-    errorStrategy 'retry'
-        maxRetries 2
+    publishDir "${params.output}/${bam_name}/1.Modmapped_bam/", mode: 'copy'
+    //errorStrategy 'retry'
+    //    maxRetries 1
     input: 
         tuple val(bam_name), path(bam)
         tuple val(fasta_ref_name), path(fasta_ref)
     output: 
-        path ("ani*"), emit: tax_check_ch
-        tuple val(name), path("*.modmapped.bam"), emit: modmapped_bam 
+        tuple val(bam_name), path("*.modmapped.bam"), path("*modmapped.bam.bai"), emit: modmapped_bam_ch
+
     script:
         """
         minimap_version=\$(minimap2 --version)

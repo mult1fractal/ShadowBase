@@ -1,14 +1,18 @@
-process motif_calling {
-    label 'minimap2'
-    errorStrategy 'ignore'
-    publishDir "${params.output}/${name}/2.pgap", mode: 'copy'
+process motif_calling { 
+    label 'microbemod'
+    publishDir "${params.output}/${name}/2.Micobemod_motifs/", mode: 'copy'
+    //errorStrategy 'retry'
+    //    maxRetries 1
     input: 
-        tuple val(name), path(fasta), val(species)
-        tuple path(pgap_db), path(pgap_db_ani)
+        tuple val(name), path(modmapped_bam), path(modmapped_bam_bai)
+        tuple val(fasta_ref_name), path(fasta_ref)
     output: 
-        tuple val(name), env(PGAP_VERSION), env(PGAP_DB_VERSION), env(COMMAND), path("annot*"), path("VERSION"), emit: pgap_report_ch
-        path ("ani*"), emit: tax_check_ch
-        tuple val(name), path("annot*"), path("VERSION"), path("pgap_tool_info.txt"), emit: pgap_file_ch 
+        tuple path("*motifs.tsv"), path("*methylated_sites.tsv"), emit: modmapped_bam_ch
     script:
         """
-        # ACTIVATE HISTORY AND PIPEFAIL
+        ##Microbemod_version=\$(MicrobeMod --version)
+
+        MicrobeMod call_methylation -b ${modmapped_bam} -r ${fasta_ref} -t 10
+
+        """
+}

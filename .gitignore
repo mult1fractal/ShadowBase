@@ -1,0 +1,7 @@
+nextflow-autodownload-databases/
+*.log*
+work/
+.nextflow/
+results/
+.Rhistory
+singularity_images/
