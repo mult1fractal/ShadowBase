@@ -2,8 +2,8 @@
 nextflow.enable.dsl=2
 
 /*
-* Nextflow -- Genome Analysis Pipeline
-* Author: CaSe-group
+* Nextflow -- methylation-calling
+* Author: CaSe-group, mqt
 */
 
 /************************** 
@@ -14,11 +14,11 @@ if ( params.help ) { exit 0, helpMSG() }
 
 // error codes
 if ( params.profile ) { exit 1, "[--profile] is WRONG use [-profile]." }
-if ( !workflow.profile.contains('test') && !params.fasta && !params.ont && !params.paired && !params.fastq_pass ) { exit 1, "Input missing. Please use --help maybe a typo?" }
+//if ( !workflow.profile.contains('test') && !params.fasta && !params.ont && !params.paired && !params.fastq_pass ) { exit 1, "Input missing. Please use --help maybe a typo?" }
 
 // DEFAULT MESSAGE
 
- defaultMSG()
+defaultMSG()
 
 /************************** 
 * INPUTs
@@ -50,11 +50,45 @@ include { motifs_wf } from './workflows/motifs_wf.nf'
 /************************** 
 * MAIN WORKFLOW
 **************************/
-
+workflow {
 
 // 1. Motif calling
         /*** microbemod ***/
-        ont_reads_to_assembly = motifs_wf(bam_raw_ch, fasta_raw_ch)
+        motifs_wf(bam_raw_ch, fasta_raw_ch)
+
+
+}
         
 
+def defaultMSG() {
+    c_green = "\033[0;32m";
+    c_reset = "\033[0m";
+    c_yellow = "\033[0;33m";
+    c_blue = "\033[0;34m";
+    c_dim = "\033[2m";
+    log.info """
+    ________________________________________________________________________________
+
+    ${c_green}Pop the Mod${c_reset} | Methylation calling
+    ________________________________________________________________________________
+    ${c_green}
+    Profile:                     $workflow.profile ${c_reset}
+    ${c_dim}
+    Current User:                $workflow.userName
+    Nextflow-version:            $nextflow.version
+    Max cores [--max_cores]:     $params.max_cores
+    Threads / process [--cores]: $params.cores
+
+    Output dir [--output]: 
+        $params.output
+    \033[2mWorkdir[-work-Dir]:
+        $workflow.workDir ${c_reset}
+    ________________________________________________________________________________
+
+
+    ${c_reset}________________________________________________________________________________
+
+    """.stripIndent()
+
+}
 
