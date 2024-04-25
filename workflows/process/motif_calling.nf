@@ -4,8 +4,7 @@ process motif_calling {
     //errorStrategy 'retry'
     //    maxRetries 1
     input: 
-        tuple val(name), path(modmapped_bam), path(modmapped_bam_bai)
-        tuple val(fasta_ref_name), path(fasta_ref)
+        tuple val(name), path(modmapped_bam), path(modmapped_bam_bai), path(fasta_ref)
     output: 
         tuple path("*motifs.tsv"), path("*methylated_sites.tsv"), emit: modmapped_bam_ch
     script:
@@ -14,5 +13,10 @@ process motif_calling {
 
         MicrobeMod call_methylation -b ${modmapped_bam} -r ${fasta_ref} -t 10
 
+        """
+        stub:
+        """
+        touch X_motifs.tsv
+        touch Y_methylated_sites.tsv
         """
 }

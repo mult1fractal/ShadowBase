@@ -3,14 +3,13 @@ include { motif_calling } from './process/motif_calling.nf'
 
 workflow motifs_wf {
     take:
-        bam         // tuple val(name), path(fasta-file)
-        fasta_ref   // tuple val(name), path(fasta-file)
+        motif_ch         // tuple val(name), path(bam-file), path(fasta-ref)
+
     main:                          
-            
-            
-            
-            mod_mapping(bam, fasta_ref)
-            motif_calling(mod_mapping.out.modmapped_bam_ch, fasta_ref)
+
+            mod_mapping(motif_ch)
+            mod_mapping.out.modmapped_bam_ch.view()
+            motif_calling(mod_mapping.out.modmapped_bam_ch)
 
     emit:
         

@@ -4,10 +4,9 @@ process mod_mapping {
     //errorStrategy 'retry'
     //    maxRetries 1
     input: 
-        tuple val(bam_name), path(bam)
-        tuple val(fasta_ref_name), path(fasta_ref)
+        tuple val(bam_name), path(bam), path(fasta_ref)
     output: 
-        tuple val(bam_name), path("*.modmapped.bam"), path("*modmapped.bam.bai"), emit: modmapped_bam_ch
+        tuple val(bam_name), path("*.modmapped.bam"), path("*modmapped.bam.bai"), path(fasta_ref), emit: modmapped_bam_ch
 
     script:
         """
@@ -16,5 +15,11 @@ process mod_mapping {
         samtools fastq -T MM,ML -n ${bam} | minimap2 -y -ax map-ont ${fasta_ref} - -t 12 | \
         samtools view -u - | samtools sort -@ 12 -o ${bam_name}.modmapped.bam; samtools index ${bam_name}.modmapped.bam -@ 12
 
+        """
+    stub:
+        """
+        touch X_.modmapped.bam
+        touch Y_modmapped.bam.bai
+        touch Z.fasta
         """
 }
