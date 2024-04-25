@@ -31,6 +31,15 @@ multi sample analysis (every sample can use a different reference sequence)
 
 I want to integrate dorado for Basecalling, Visualization 
 
+# 1. Quick Setup (Ubuntu)
+## 1.1 Nextflow (the workflow manager)
+* poreCov needs [Nextflow](https://www.nextflow.io/index.html) and java run time (default-jre)
+    * install java run time via:  `sudo apt install -y default-jre`
+    * install Nextflow via:  `curl -s https://get.nextflow.io | bash && sudo mv nextflow /bin && sudo chmod 770 /bin/nextflow`
+## 1.2 Container (choose one - they manage all the tools)
+### Docker
+* installation [here](https://docs.docker.com/v17.09/engine/installation/linux/docker-ce/ubuntu/#install-docker-ce) (recommended), alternatively via: `sudo apt install -y docker`
+* add Docker to the user: `sudo usermod -a -G docker $USER`
 
 
 
