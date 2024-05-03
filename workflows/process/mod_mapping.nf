@@ -1,6 +1,6 @@
 process mod_mapping { 
     label 'minimap2'
-    publishDir "${params.output}/${bam_name}/1.Modmapped_bam/", mode: 'copy', pattern: "$*.bam*"
+    publishDir "${params.output}/${bam_name}/1.Modmapped_bam/", mode: 'copy', pattern: "*.bam*"
     //errorStrategy 'retry'
     //    maxRetries 1
     input: 
