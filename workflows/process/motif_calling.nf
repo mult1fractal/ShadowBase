@@ -6,7 +6,7 @@ process motif_calling {
     input: 
         tuple val(name), path(modmapped_bam), path(modmapped_bam_bai), path(fasta_ref)
     output: 
-        tuple path("*motifs.tsv"), path("*methylated_sites.tsv"), emit: modmapped_bam_ch
+        tuple val(name), path("*motifs.tsv"), path("*methylated_sites.tsv"), emit: modmapped_bam_ch
     script:
         """
         ##Microbemod_version=\$(MicrobeMod --version)

@@ -12,9 +12,9 @@ process modkit {
         """
         modkit_version=\$(modkit -Version)
 
-         modkit pileup ${modmapped_bam} ${name}_pileup.bed \
-            --ref ${fasta_ref} \
-            --preset traditional
+         modkit pileup --only-tabs ${modmapped_bam} ${name}_pileup.bed
+            ##--ref ${fasta_ref} \
+            ## --preset traditional
 
         """
     stub:
