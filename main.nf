@@ -46,6 +46,7 @@ defaultMSG()
         samples_input_ch = Channel.fromPath( params.samples, checkIfExists: true)
             .splitCsv(header: false, sep: ',', strip: true )
             .map { row -> tuple("${row[0]}" ,file(row[1], checkIfExists: true), file(row[2], checkIfExists: true)) }
+        }    
     // 
     else { samples_input_ch = Channel.empty() }
 
@@ -69,6 +70,7 @@ workflow {
         motif_ch =  bam_raw_ch
                     .combine(fasta_raw_ch)
                     .mix(samples_input_ch)
+                     
 
          motifs_wf(motif_ch)
         //if (!params.bam && !params.fasta_ref && params.samples) { motifs_wf(bam_raw_ch, fasta_raw_ch) }
