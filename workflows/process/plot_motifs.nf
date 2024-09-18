@@ -9,7 +9,7 @@ process plot_motifs {
         path("motifs.pdf")
     script:
         """
-        motif_plotting.R \$(ls *.tsv) motifs.pdf
+        motif_plotting.R \$(ls *motifs.tsv) motifs.pdf
 
         """
         stub:

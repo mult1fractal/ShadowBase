@@ -1,12 +1,12 @@
 process nanomotif_isolate { 
     label 'nanomotif'
     publishDir "${params.output}/${name}/4.Nanomotif_isolate/", mode: 'copy'
-    //errorStrategy 'retry'
+    errorStrategy 'ignore'
     //    maxRetries 1
     input: 
         tuple val(name), path(bed), path(fasta_ref)
     output: 
-        tuple val(name), path("*motifs.tsv") , emit: nanomotif_isolate_ch
+        path("nanomotif") , emit: nanomotif_isolate_ch
 
     script:
         """

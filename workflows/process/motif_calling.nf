@@ -11,7 +11,7 @@ process motif_calling {
         """
         ##Microbemod_version=\$(MicrobeMod --version)
 
-        MicrobeMod call_methylation -b ${modmapped_bam} -r ${fasta_ref} -t 10
+        MicrobeMod call_methylation -b ${modmapped_bam} -r ${fasta_ref} -t ${task.cpus} 
 
         """
         stub:
@@ -20,3 +20,5 @@ process motif_calling {
         touch Y_methylated_sites.tsv
         """
 }
+
+// there is also other outputs that can to be "Published"

@@ -3,6 +3,7 @@ include { motif_calling } from './process/motif_calling.nf'
 include { modkit } from './process/modkit.nf'
 include { nanomotif_isolate } from './process/nanomotif_isolate.nf'
 include { plot_motifs } from './process/plot_motifs.nf'
+include { modkit_motif } from './process/modkit.nf'
 
 workflow motifs_wf {
     take:
@@ -14,14 +15,14 @@ workflow motifs_wf {
     
             // identify motifs vie MicrobeMod
             motif_calling(mod_mapping.out.modmapped_bam_ch)
-                    
-            // modify channel for plotting
-            // tuple val(name), path("*motifs.tsv"), path("*methylated_sites.tsv"), emit: modmapped_bam_ch
+             
+            // modify channel for plotting // tuple val(name), path("*motifs.tsv"), path("*methylated_sites.tsv"), emit: modmapped_bam_ch
             plot_ch = motif_calling.out.modmapped_bam_ch.collect( {it -> tuple(it[1])})
+            plot_ch.view()
             plot_motifs(plot_ch)
 
-
-            //modkit(mod_mapping.out.modmapped_bam_ch)
+            modkit(mod_mapping.out.modmapped_bam_ch)
+            modkit_motif(modkit.out)
             //nanomotif_isolate(modkit.out)
     emit:
         
