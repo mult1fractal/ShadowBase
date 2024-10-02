@@ -1,4 +1,4 @@
-process motif_calling { 
+process microbemod_motif { 
     label 'microbemod'
     publishDir "${params.output}/${name}/2.Micobemod_motifs/", mode: 'copy'
     //  errorStrategy 'retry'
@@ -18,6 +18,29 @@ process motif_calling {
         """
         touch X_motifs.tsv
         touch Y_methylated_sites.tsv
+        """
+}
+
+process microbemod_RM_MT { 
+    label 'microbemod'
+    publishDir "${params.output}/${name}/2.Micobemod_motifs/RN_genes", mode: 'copy'
+    //  errorStrategy 'retry'
+    //    maxRetries 1
+    input: 
+        tuple val(name), path(fasta_ref)
+    output: 
+        tuple val(name), path("*_RM_genes*"), emit: modmapped_bam_ch
+    script:
+        """
+        ##Microbemod_version=\$(MicrobeMod --version)
+
+        MicrobeMod annotate_rm -f ${fasta_ref} -o ${name}_RM_genes -t ${task.cpus} 
+
+        """
+        stub:
+        """
+        tocch X_RN_genes.tsv
+ 
         """
 }
 

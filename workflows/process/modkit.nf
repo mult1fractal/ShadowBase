@@ -35,7 +35,7 @@ process modkit_motif {
     input: 
         tuple val(name), path(pileup_bed), path(fasta_ref)
     output: 
-        tuple val(name), path("*_motifs.tsv"), path("*modkit_find_motifs_log.txt"), emit: pileup_bed_ch // path("bedgraph_results")
+        tuple val(name), path("*_motifs.tsv"), path("*modkit_find_motifs_log.txt"), emit: modkit_motif_ch // path("bedgraph_results")
 
     script:
         """
@@ -53,5 +53,51 @@ process modkit_motif {
         """
         touch Y_modkit_find_motifs_log.txt 
         touch Y_motifs.tsv 
+        """
+}
+
+
+process modkit_call_mods { 
+    label 'modkit'
+    publishDir "${params.output}/${name}/3.Modkit/call-mods-bam", mode: 'copy', pattern: "*"
+    // errorStrategy 'ignore'
+    //    maxRetries 1
+    input: 
+        tuple val(name), path(modmapped_bam), path(modmapped_bam_bai), path(fasta_ref)
+    output: 
+        tuple val(name), path("*.bam"),  emit: call_mods_ch 
+    script:
+        """
+        modkit_version=\$(modkit -Version)
+
+        modkit call-mods ${modmapped_bam} ${name}_call-mods.bam -t ${task.cpus}
+
+        """
+    stub:
+        """
+        touch call_mods.bam    
+        mkdir Y_bedgraph
+        """
+}
+
+process modkit_bedgraph { 
+    label 'modkit'
+    publishDir "${params.output}/${name}/3.Modkit/bedgraph", mode: 'copy', pattern: "*"
+    // errorStrategy 'ignore'
+    //    maxRetries 1
+    input: 
+        tuple val(name), path(modmapped_bam), path(modmapped_bam_bai)
+    output: 
+        tuple val(name), path("*_bedgraph"),  emit: call_mods_ch 
+    script:
+        """
+        modkit_version=\$(modkit -Version)
+
+        modkit pileup ${modmapped_bam} --bedgraph ${name}_bedgraph --prefix ${name} -t ${task.cpus}
+        """
+    stub:
+        """
+        touch call_mods.bam    
+        mkdir Y_bedgraph
         """
 }
