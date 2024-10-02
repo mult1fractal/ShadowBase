@@ -19,7 +19,7 @@ filein <- args[-length(args)] # Alle anderen Argumente sind Eingabedateien
 
 
 # Dateinamen laden
-files <- list.files(pattern = "modmapped_motifs.tsv$")
+files <- list.files(pattern = "motifs.tsv$")
 
 # Daten einlesen und kombinieren
 

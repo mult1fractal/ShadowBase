@@ -125,3 +125,24 @@ def defaultMSG() {
 
 }
 
+/*************  
+* MSG
+*************/
+def helpMSG() {
+     log.info """
+    Single Sample Input
+    nextflow run main.nf --fasta_ref test_data/ref-fasta/barcode20.fasta --bam test_data/bam-files/barcode20.bam --output test -work-dir /home/x/Workflows/pop_the_mod/work/ -profile local,docker
+
+    Multi Sample Input (multi reference)
+    nextflow run main.nf --samples samples.csv --output test/samples -work-dir foo/work/ -profile local,docker
+
+
+    provide a samples.csv file like this:
+    A,/bam-files/barcode20.bam,/ref-fasta/barcode20.fasta
+    B,/bam-files/barcode21.bam,/ref-fasta/barcode21.fasta
+    C,/bam-files/barcode22.bam,/ref-fasta/barcode22.fasta
+
+    """.stripIndent()
+}
+
+
