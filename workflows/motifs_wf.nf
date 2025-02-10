@@ -7,6 +7,7 @@ include { plot_motifs } from './process/plot_motifs.nf'
 include { modkit_motif } from './process/modkit.nf'
 include { modkit_call_mods } from './process/modkit.nf'
 include { modkit_bedgraph } from './process/modkit.nf'
+include { plasflow } from './process/plasflow.nf'
 
 
 
@@ -15,6 +16,11 @@ workflow motifs_wf {
         motif_ch         // tuple val(name), path(bam-file), path(fasta-ref)
 
     main:                          
+            // plasflow bekommt nur die fasta zuerst, dann auf den motif ch matchen
+            plasflow_in_ch=motif_ch.map( {it -> tuple(it[0], it[3])}) // find out what is fasta
+            plasflow()
+
+
             // mapping methylated MM ML tags to reference fasta via minimap
             mod_mapping(motif_ch)
     
