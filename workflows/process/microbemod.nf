@@ -2,6 +2,7 @@ process microbemod_motif {
     label 'microbemod'
     publishDir "${params.output}/${name}/2.Micobemod_motifs/", mode: 'copy'
     //  errorStrategy 'retry'
+    errorStrategy 'ignore'
     //    maxRetries 1
     input: 
         tuple val(name), path(modmapped_bam), path(modmapped_bam_bai), path(fasta_ref)
@@ -26,6 +27,7 @@ process microbemod_RM_MT {
     publishDir "${params.output}/${name}/2.Micobemod_motifs/RN_genes", mode: 'copy'
     //  errorStrategy 'retry'
     //    maxRetries 1
+    errorStrategy 'ignore'
     input: 
         tuple val(name), path(fasta_ref)
     output: 
