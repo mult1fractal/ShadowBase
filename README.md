@@ -29,7 +29,6 @@ multi sample analysis (every sample can use a different reference sequence)
 [microbeMod]()
 
 
-I want to integrate dorado for Basecalling, Visualization 
 
 # 1. Quick Setup (Ubuntu)
 ## 1.1 Nextflow (the workflow manager)
