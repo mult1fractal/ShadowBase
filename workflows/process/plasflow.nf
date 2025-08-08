@@ -20,3 +20,6 @@ process plasflow {
         touch  ${name}_chromosomes.fasta ${name}_plasmids.fasta ${name}_unclassified.fasta
         """
 }
+
+
+// sollte noch vor dem modmapping  bam v fasta kommen?
