@@ -4,9 +4,9 @@ process plasflow {
     input:
         tuple val(name), path(fasta)
     output:
-        tuple val(name), path("${name}_chromosomes.fasta"), emit: chromosomes  optional true
-        tuple val(name), path("${name}_plasmids_plasmids.fasta"), emit: plasmids  optional true
-        tuple val(name), path("${name}_unclassified_unclassified.fasta"), emit: unclassified  optional true
+        tuple val(name), path("${name}_chromosomes.fasta"), emit: chromosomes_ch,  optional true
+        tuple val(name), path("${name}_plasmids.fasta"), emit: plasmids_ch,  optional true
+        tuple val(name), path("${name}_unclassified.fasta"), emit: unclassified,  optional true
 
     script:
         """
