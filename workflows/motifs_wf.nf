@@ -7,7 +7,7 @@ include { plot_motifs } from './process/plot_motifs.nf'
 include { modkit_motif } from './process/modkit.nf'
 include { modkit_call_mods } from './process/modkit.nf'
 include { modkit_bedgraph } from './process/modkit.nf'
-include { plasflow } from './process/plasflow.nf'
+// include { plasflow } from './process/plasflow.nf'
 
 
 
