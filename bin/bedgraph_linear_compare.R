@@ -49,7 +49,8 @@ uniformtheme <- theme_classic() +
       theme(text = element_text(size=30), axis.text.x = element_text(angle = 45, hjust = 1))
 
 
-plot <- ggplot(data = combined_data, aes(x=start, y=Value, fill=contig)) + 
+plot <- ggplot(data = combined_df, aes(x=V2, y=V4)) + 
+    geom_bar(stat="identity") +
     geom_tile(width=0.99, height=0.99) +
     labs(x="genome position", y="methylation likelyhood", fill="contig") +
     labs(title = "Methylation frequency bedfile") +
@@ -59,8 +60,6 @@ plot <- ggplot(data = combined_data, aes(x=start, y=Value, fill=contig)) +
 print(plot)
 
 
-# pdf("Methylation_motifs.pdf",height = 10, width = 25) 
-pdf(fileout,height = 10, width = 25) 
+pdf('Methylation_motifs_bar.pdf', width=25, height=5)
 plot
 dev.off()
-#pdf("phage-distribution.pdf") 

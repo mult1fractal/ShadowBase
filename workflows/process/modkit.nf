@@ -6,7 +6,7 @@ process modkit {
     input: 
         tuple val(name), path(modmapped_bam), path(modmapped_bam_bai), path(fasta_ref)
     output: 
-        tuple val(name), path("*_pileup.bed"), path(fasta_ref), emit: pileup_bed_ch // path("bedgraph_results")
+        tuple val(name), path("*_pileup.bed"), path(fasta_ref), emit: pileup_bed_ch, optional: true // path("bedgraph_results")
 
     script:
         """
@@ -35,7 +35,7 @@ process modkit_motif {
     input: 
         tuple val(name), path(pileup_bed), path(fasta_ref)
     output: 
-        tuple val(name), path("*_motifs.tsv"), path("*modkit_find_motifs_log.txt"), emit: modkit_motif_ch // path("bedgraph_results")
+        tuple val(name), path("*_motifs.tsv"), path("*modkit_find_motifs_log.txt"), emit: modkit_motif_ch, optional: true // path("bedgraph_results")
 
     script:
         """
@@ -65,7 +65,7 @@ process modkit_call_mods {
     input: 
         tuple val(name), path(modmapped_bam), path(modmapped_bam_bai), path(fasta_ref)
     output: 
-        tuple val(name), path("*.bam"),  emit: call_mods_ch 
+        tuple val(name), path("*.bam"),  emit: call_mods_ch, optional: true
     script:
         """
         modkit_version=\$(modkit -Version)
@@ -88,12 +88,13 @@ process modkit_bedgraph {
     input: 
         tuple val(name), path(modmapped_bam), path(modmapped_bam_bai)
     output: 
-        tuple val(name), path("*_bedgraph"),  emit: call_mods_ch 
+        tuple val(name), path("${name}/bedgraphs"),  emit: call_mods_ch, optional: true 
     script:
         """
         modkit_version=\$(modkit -Version)
-
-        modkit pileup ${modmapped_bam} --bedgraph ${name}_bedgraph --prefix ${name} -t ${task.cpus}
+        
+        modkit pileup -t ${task.cpus} ${modmapped_bam} --bedgraph ${name}/bedgraphs --filter-threshold ${params.filter_threshold_modkit} 
+  
         """
     stub:
         """
