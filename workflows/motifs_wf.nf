@@ -7,21 +7,27 @@ include { plot_motifs } from './process/plot_motifs.nf'
 include { modkit_motif } from './process/modkit.nf'
 include { modkit_call_mods } from './process/modkit.nf'
 include { modkit_bedgraph } from './process/modkit.nf'
+include { mestudio } from './process/mestudio.nf'
 // include { plasflow } from './process/plasflow.nf'
 
 
 
 workflow motifs_wf {
     take:
-        motif_ch         // tuple val(name), path(bam-file), path(fasta-ref)
+        // motif_ch         // tuple val(name), path(bam-file), path(fasta-ref)
+        bam_raw_ch
+        fasta_raw_ch
 
     main:                          
             // plasflow bekommt nur die fasta zuerst, dann auf den motif ch matchen
             // plasflow_in_ch=motif_ch.map( {it -> tuple(it[0], it[3])}) // find out what is fasta
             // plasflow(plasflow_in_ch)
-
+            
 
             // mapping methylated MM ML tags to reference fasta via minimap
+           motif_ch = bam_raw_ch
+                .combine(fasta_raw_ch)
+
             mod_mapping(motif_ch)
     
             
@@ -52,6 +58,11 @@ workflow motifs_wf {
             //bedgraph_ch.view()
             modkit_bedgraph(bedgraph_ch)
             //nanomotif_isolate(modkit.out)
+
+            // mestudio
+            // this needs input preparation: -f ${fasta} -anno ${annotation} -smart modifications.gff -mo ${motifs} 
+            mestudio(mod_mapping.out.modmapped_bam_ch)
+
     emit:
         
         modmapped_bam = mod_mapping.out.modmapped_bam_ch  //tuple val(name), path("*.modmapped.bam"),

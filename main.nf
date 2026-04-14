@@ -67,6 +67,10 @@ workflow {
         Channel.fromPath(params.fasta_ref, checkIfExists: true) : 
         Channel.empty()
 
+    annotation_raw_ch = params.annotation ? 
+        Channel.fromPath(params.annotation, checkIfExists: true) : 
+        Channel.empty()
+
     // multiple files to analyse
     samples_input_ch = params.samples ? 
         Channel.fromPath(params.samples, checkIfExists: true)
@@ -83,7 +87,7 @@ workflow {
                 .combine(fasta_raw_ch)
                 .mix(samples_input_ch)
                  
-    motifs_wf(motif_ch)
+    motifs_wf(bam_raw_ch, fasta_raw_ch)
 
 }
 
